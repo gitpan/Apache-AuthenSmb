@@ -4,7 +4,7 @@ use strict;
 use Apache::Constants ':common';
 use Authen::Smb;
 
-$Apache::AuthenSmb::VERSION = '0.50';
+$Apache::AuthenSmb::VERSION = '0.60';
 
 
 sub handler {

@@ -1,5 +1,9 @@
 Revision history for Perl extension Apache::AuthenSmb.
 
+0.50  Mon Jun  7 14:50:00 1999
+        - Fixed Smb->Authen::Smb deal in Makefile.PL
+        - Require Authen::Smb 0.9 or greater due to buffer overflow problem
+
 0.50  Wed Mar 24 15:26:00 1999
 	- Change Smb to Authen::Smb and updated the documentation
 
