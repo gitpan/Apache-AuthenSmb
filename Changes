@@ -1,5 +1,15 @@
 Revision history for Perl extension Apache::AuthenSmb.
 
+0.72  Fri Mar 26 14:50:00 2004
+	- split domain\username so that one can manipulate
+	  one or all members of the array
+	- added htgroup check for require group capabilities
+	  (All thanks to Carlos Ramirez.  Thanks!!)
+	- Added documentation to include PerlSetVar items
+	- Cleaned up code a bit
+	- Added Apache::Htgroup as a prereq for this module
+	  in the Makefile.PL
+
 0.71  Wed Mar 17 14:50:00 2004
 	- fixed $r->log_reason, $r->log_error error on line 99
 	  (Thanks to Jason Lehman)

@@ -40,6 +40,7 @@
 	},
 	-core		=> [
 		Authen::Smb => '0.9',
+		Apache::Htgroup => '',
 	        mod_perl => '',
 	], 		# core modules; may also be 'all'
     );
