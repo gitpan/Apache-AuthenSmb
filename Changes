@@ -1,5 +1,9 @@
 Revision history for Perl extension Apache::AuthenSmb.
 
+0.71  Wed Mar 17 14:50:00 2004
+	- fixed $r->log_reason, $r->log_error error on line 99
+	  (Thanks to Jason Lehman)
+
 0.70  Mon Jul  28 14:50:00 2003
 	- Ported to work with both versions of mod_perl
 	- Changed Michaels email :) 

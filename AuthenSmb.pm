@@ -4,7 +4,7 @@ use strict;
 #use Apache::Constants ':common';
 use Authen::Smb;
 
-$Apache::AuthenSmb::VERSION = '0.70';
+$Apache::AuthenSmb::VERSION = '0.71';
 
 ############################################
 # here is where we start the new code....
@@ -96,7 +96,7 @@ sub authz {
     }
     
     $r->note_basic_auth_failure;
-    $r->log_reason("user $name: not authorized", $r->uri);
+    MP2 ? $r->log_error("user $name: not authorized", $r->uri) : $r->log_reason("user $name: not authorized", $r->uri);
      return MP2 ? Apache::HTTP_UNAUTHORIZED : Apache::Constants::HTTP_UNAUTHORIZED;
 
 }
