@@ -2,9 +2,9 @@ package Apache::AuthenSmb;
 
 use strict;
 use Apache::Constants ':common';
-use Smb;
+use Authen::Smb;
 
-$Apache::AuthenSmb::VERSION = '0.20';
+$Apache::AuthenSmb::VERSION = '0.50';
 
 
 sub handler {
@@ -30,7 +30,7 @@ sub handler {
         return AUTH_REQUIRED;
     }
 
-    my $return = Smb::authen($name,
+    my $return = Authen::Smb::authen($name,
 			     $sent_pwd,
 			     $pdc,
 			     $bdc,
@@ -42,7 +42,9 @@ sub handler {
 	return AUTH_REQUIRED;
     }
 
-    $r->push_handlers(PerlAuthzHandler => \&authz);
+    unless (@{ $r->get_handlers("PerlAuthzHandler") || []}) {
+	$r->push_handlers(PerlAuthzHandler => \&authz);
+    }
 
     return OK;
 }
@@ -104,20 +106,23 @@ Apache::AuthenSMB - mod_perl NT Authentication module
 
     These directives can be used in a .htaccess file as well.
 
+    If you wish to use your own PerlAuthzHandler then the require 
+    directive should follow whatever handler you use.
+
 = head1 DESCRIPTION
 
-This perl module is designed to work with mod_perl and the Smb module
-by Patrick Michael Kane (http://www.fatal.org/~modus/).  You need
-to set your PDC, BDC, and NT domain name for the script to function
-properly.  You MUST set a PDC, if no BDC is set it defaults to the
-PDC, if no DOMAIN is set it defaults to WORKGROUP.
+This perl module is designed to work with mod_perl and the Authen::Smb
+module by Patrick Michael Kane (See CPAN).  You need to set your PDC,
+BDC, and NT domain name for the script to function properly.  You MUST
+set a PDC, if no BDC is set it defaults to the PDC, if no DOMAIN is
+set it defaults to WORKGROUP.
 
-I welcome any feedback on this module.  As the Smb module grows I plan
-to expand some of the functionality (ie groups) to this script.
+If you are using this module please let me know, I'm curious how many
+people there are that need this type of functionality.
 
 =head1 AUTHOR
 
-Michael Parker <parker@austx.tandem.com>
+Michael Parker <parkerm@null.net>
 
 =head1 COPYRIGHT
 
