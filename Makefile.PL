@@ -1,46 +1,53 @@
-use ExtUtils::MakeMaker;
 
+    # ExtUtils::AutoInstall Bootstrap Code, version 7.
+    BEGIN{my$p='ExtUtils::AutoInstall';my$v=0.52;$p->VERSION||0>=$v
+    or+eval"use $p $v;1"or+do{my$e=$ENV{PERL_EXTUTILS_AUTOINSTALL};
+    (!defined($e)||$e!~m/--(?:default|skip|testonly)/and-t STDIN or
+    eval"use ExtUtils::MakeMaker;WriteMakefile(PREREQ_PM=>{'$p',$v}
+    );1"and exit)and print"==> $p $v required. Install it from CP".
+    "AN? [Y/n] "and<STDIN>!~/^n/i and print"*** Installing $p\n"and
+    do{if (eval '$>' and lc(`sudo -V`) =~ /version/){system('sudo',
+    $^X,"-MCPANPLUS","-e","CPANPLUS::install $p");eval"use $p $v;1"
+    ||system('sudo', $^X, "-MCPAN", "-e", "CPAN::install $p")}eval{
+    require CPANPLUS;CPANPLUS::install$p};eval"use $p $v;1"or eval{
+    require CPAN;CPAN::install$p};eval"use $p $v;1"||die"*** Please
+    manually install $p $v from cpan.org first...\n"}}}
 
-# The following code to check the module and version number was borrowed
-# from Graham Barr's perl-ldap module set.
+    # notify the user about mod_perl 2
+    BEGIN { print q{
+        **************** NOTICE *********************
+        If you are planning to use mod_perl2 and Apache2, please, do not
+        answer yes when prompted to install mod_perl.  You will need to
+        download mod_perl2 manually from
+        http://perl.apache.org/download/index.html
+        *********************************************
+    } }    
 
-my $missing = 0;
-$| = 1;
+    # optional pre-install handler; takes $module_name and $version
+    # sub MY::preinstall  { return 1; }	# return false to skip install
 
-sub check_module {
-    my($module,$version) = @_;
-    print substr("$module ............................",0,30);
-    my $ok = eval {
-	my $file = $module;
-    $file =~ s#::#/#g;
-	require $file . ".pm";
-	$module->VERSION($version) if defined $version;
-	1;
-    };
-    $missing++ unless $ok;
-    print $ok ? "ok\n" : "** FAILED **\n$@\n";
-    $ok;
-}
+    # optional post-install handler; takes $module_name, $version, $success
+    # sub MY::postinstall { return; }	# the return value doesn't matter
 
+    # the above handlers must be declared before the 'use' statement
+    use ExtUtils::AutoInstall (
+	-version	=> '0.40',	# required AutoInstall version
+	                                # usually 0.40 is sufficient
+	-config		=> {
+	    make_args	=> '--hello',	# option(s) for CPAN::Config
+	    force	=> 1,		# pseudo-option to force install
+	    do_once	=> 1,		# skip previously failed modules
+	},
+	-core		=> [
+		Authen::Smb => '0.9',
+	        mod_perl => '',
+	], 		# core modules; may also be 'all'
+    );
 
-print "Checking for installed modules\n\n";
-
-check_module('Authen::Smb',0.9) or print <<"EOF","\n";
-Authen::Smb version 0.9 or greater required.  All versions of Authen::Smb below 0.9
-have possible buffer overflows in the underlying smbval library.
-EOF
-
-if ($missing) {
-    print "\n",<<"EOF", "\n";
-Please visit CPAN to obtain up to date version of the missing modules.
-EOF
-exit;
-}
-
-
-
-WriteMakefile(
-    'NAME'	=> 'Apache::AuthenSmb',
-    'VERSION_FROM' => 'AuthenSmb.pm', # finds $VERSION
-    'dist' => {COMPRESS => 'gzip', SUFFIX => 'gz'}
-);
+    WriteMakefile(
+	AUTHOR          => 'Michael Parker (parkerm@pobox.com) and Shannon Eric Peevey (speeves@unt.edu)',
+	ABSTRACT        => 'Apache::AuthenSmb -- mod_perl NT Authentication module',
+	NAME      => 'Apache::AuthenSmb',
+        VERSION_FROM => 'AuthenSmb.pm', # finds $VERSION
+	DISTNAME        => 'Apache-AuthenSmb',
+    );
