@@ -1,5 +1,8 @@
 Revision history for Perl extension Apache::AuthenSmb.
 
+0.20  Wed Jul  1 13:24:00 1998
+	- Fixed bug where blank username would give you access.
+
 0.10  Fri Apr 17 10:10:10 1998
 	- First Beta Release
 

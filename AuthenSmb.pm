@@ -4,7 +4,7 @@ use strict;
 use Apache::Constants ':common';
 use Smb;
 
-$Apache::AuthenSmb::VERSION = '0.10';
+$Apache::AuthenSmb::VERSION = '0.20';
 
 
 sub handler {
@@ -17,11 +17,16 @@ sub handler {
     my $pdc = $r->dir_config('myPDC');
     my $bdc = $r->dir_config('myBDC') || $pdc;
     my $domain = $r->dir_config('myDOMAIN') || "WORKGROUP";
-    
+
+    if ($name eq "") {
+	$r->note_basic_auth_failure;
+        $r->log_reason("Apache::AuthenSmb - No Username Given", $r->uri);
+        return AUTH_REQUIRED;
+    }
 
     if (!$pdc) {
 	$r->note_basic_auth_failure;
-        $r->log_reason("Configuration error, no PDC", $r->uri);
+        $r->log_reason("Apache::AuthenSmb - Configuration error, no PDC", $r->uri);
         return AUTH_REQUIRED;
     }
 
